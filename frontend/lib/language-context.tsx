@@ -105,9 +105,9 @@ const translations: Translations = {
 		en: "Time Range",
 		hu: "Időtartomány",
 	},
-	"telemetry.messages": {
-		en: "Messages",
-		hu: "Üzenetek",
+	"telemetry.telemetries": {
+		en: "Telemetry messages",
+		hu: "Telemetria üzenetek",
 	},
 	"telemetry.messagedetails": {
 		en: "Message details",

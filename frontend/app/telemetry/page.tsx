@@ -1,19 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLanguage } from "@/lib/language-context";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { generateTelemetryMessages } from "@/lib/dummy-data";
 import { formatDate, convertToBinary, convertToHex } from "@/lib/utils";
+import { fetchTelemetry } from "@/lib/api";
 
 export default function Telemetry() {
 	const { t } = useLanguage();
-	const [messages] = useState(generateTelemetryMessages(20));
+	const [messages, setMessages] = useState<any[]>([]);
 	const [selectedMessage, setSelectedMessage] = useState(messages[0]);
 	const [displayMode, setDisplayMode] = useState<
 		"raw" | "binary" | "decimal" | "hexadecimal"
 	>("decimal");
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+
+	useEffect(() => {
+		async function fetchMessages() {
+			try {
+				const data = await fetchTelemetry("/telegrams");
+				setMessages(data);
+				setSelectedMessage(data[0]);
+			} catch (err: any) {
+				setError(err.message);
+			} finally {
+				setLoading(false);
+			}
+		}
+		fetchMessages();
+	}, []);
 
 	const getMessageTypeName = (type: number) => {
 		switch (type) {
@@ -65,10 +82,15 @@ export default function Telemetry() {
 		}
 	};
 
+	if (loading) return <p>Loading...</p>;
+	if (error) return <p>Error: {error}</p>;
+
 	return (
 		<div className="content-container">
 			<div className="container py-6">
-				<h1 className="text-2xl font-bold mb-6">{t("telemetry.messages")}</h1>
+				<h1 className="text-2xl font-bold mb-6">
+					{t("telemetry.telemetries")}
+				</h1>
 
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 					<div className="md:col-span-1 space-y-4">
@@ -82,17 +104,9 @@ export default function Telemetry() {
 										}`}
 										onClick={() => setSelectedMessage(message)}
 									>
-										<CardContent className="p-4">
-											<div className="flex justify-between items-center">
-												<div className="font-medium">
-													{getMessageTypeName(message.type)} Message
-												</div>
-												<div className="text-sm text-muted-foreground">
-													ID: {message.id}
-												</div>
-											</div>
-											<div className="text-sm text-muted-foreground mt-1">
-												{formatDate(message.timestamp)}
+										<CardContent className="p-3">
+											<div className="text-sm text-muted-foreground">
+												{message.timestamp}
 											</div>
 										</CardContent>
 									</Card>
@@ -104,7 +118,7 @@ export default function Telemetry() {
 					<div className="md:col-span-2">
 						<Card className="h-full p-2">
 							<div className="flex justify-between items-center space-x-2 m-4">
-								<h1 className="text-xl">{t("telemetry.messagedetails")}</h1>
+								<h1 className="text-xl">{selectedMessage.timestamp}</h1>
 								<div className="flex space-x-2">
 									<Button
 										variant={displayMode === "raw" ? "default" : "outline"}
@@ -138,35 +152,29 @@ export default function Telemetry() {
 									</Button>
 								</div>
 							</div>
-							<Card>
-								<CardContent className="p-6">
-									<div className="flex justify-between items-center mb-4">
-										<h2 className="text-xl">
-											{getMessageTypeName(selectedMessage.type)} Message
-										</h2>
-										<div className="text-sm text-muted-foreground">
-											{formatDate(selectedMessage.timestamp)}
-										</div>
-									</div>
 
-									<div className="space-y-6">
-										{getParameterNames(selectedMessage.type).map(
-											(name, index) => (
-												<div key={index} className="space-y-1">
-													<div className="text-sm font-medium text-muted-foreground">
-														{name}
-													</div>
-													<div className="text-2xl font-mono">
-														{selectedMessage.payload[index] !== undefined
-															? formatValue(selectedMessage.payload[index])
-															: "N/A"}
-													</div>
+							<div className="m-10">
+								<h2 className="text-s w-full break-all">
+									{selectedMessage.telegram}
+								</h2>
+
+								<div className="space-y-6">
+									{getParameterNames(selectedMessage.type).map(
+										(name, index) => (
+											<div key={index} className="space-y-1">
+												<div className="text-sm font-medium text-muted-foreground">
+													{name}
 												</div>
-											)
-										)}
-									</div>
-								</CardContent>
-							</Card>
+												<div className="text-2xl font-mono">
+													{selectedMessage.payload[index] !== undefined
+														? formatValue(selectedMessage.payload[index])
+														: "N/A"}
+												</div>
+											</div>
+										)
+									)}
+								</div>
+							</div>
 						</Card>
 					</div>
 				</div>
