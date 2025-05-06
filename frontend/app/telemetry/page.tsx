@@ -20,7 +20,7 @@ export default function Telemetry() {
 	useEffect(() => {
 		async function fetchMessages() {
 			try {
-				const data = await fetchTelemetry("/telegrams");
+				const data = await fetchTelemetry("/telegramsWithProperties");
 				setMessages(data);
 				setSelectedMessage(data[0]);
 			} catch (err: any) {
@@ -31,21 +31,6 @@ export default function Telemetry() {
 		}
 		fetchMessages();
 	}, []);
-
-	const getMessageTypeName = (type: number) => {
-		switch (type) {
-			case 1:
-				return "Power";
-			case 2:
-				return "Temperature";
-			case 3:
-				return "Current";
-			case 4:
-				return "Status";
-			default:
-				return "Unknown";
-		}
-	};
 
 	const getParameterNames = (type: number) => {
 		switch (type) {
@@ -157,23 +142,18 @@ export default function Telemetry() {
 								<h2 className="text-s w-full break-all">
 									{selectedMessage.telegram}
 								</h2>
-
-								<div className="space-y-6">
-									{getParameterNames(selectedMessage.type).map(
-										(name, index) => (
-											<div key={index} className="space-y-1">
-												<div className="text-sm font-medium text-muted-foreground">
-													{name}
-												</div>
-												<div className="text-2xl font-mono">
-													{selectedMessage.payload[index] !== undefined
-														? formatValue(selectedMessage.payload[index])
-														: "N/A"}
-												</div>
-											</div>
-										)
-									)}
+								<div className="flex justify-between items-center space-x-2">
+									<h2 className="text-s w-full break-all">Solar xp</h2>
+									<h2 className="text-s w-full break-all">
+										{formatValue(selectedMessage.v_Solar_Xp)}
+									</h2>
 								</div>
+								<h2 className="text-s w-full break-all">
+									{selectedMessage.v_Solar_Xm}
+								</h2>
+								<h2 className="text-s w-full break-all">
+									{selectedMessage.v_Solar_Ym}
+								</h2>
 							</div>
 						</Card>
 					</div>

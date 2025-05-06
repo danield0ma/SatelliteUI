@@ -11,6 +11,10 @@ import java.time.LocalDateTime;
 public class TelegramPropertiesDto {
     @Getter
     @Setter
+    private Long id;
+
+    @Getter
+    @Setter
     private String telegram;
 
     @Getter

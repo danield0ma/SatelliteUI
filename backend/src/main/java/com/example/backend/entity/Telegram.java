@@ -27,6 +27,7 @@ public class Telegram {
 
     public TelegramPropertiesDto mapTelegramToTelegramPropertiesDto() {
         TelegramPropertiesDto telegramPropertiesDto = new TelegramPropertiesDto();
+        telegramPropertiesDto.setId(this.id);
         telegramPropertiesDto.setTelegram(this.telegram);
         telegramPropertiesDto.setTimestamp(this.timestamp);
 
