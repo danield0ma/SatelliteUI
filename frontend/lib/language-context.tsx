@@ -1,0 +1,202 @@
+"use client"
+
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+
+type Language = "en" | "hu"
+
+type Translations = {
+  [key: string]: {
+    [key in Language]: string
+  }
+}
+
+// Define our translations
+const translations: Translations = {
+  "app.title": {
+    en: "SatelliteUI",
+    hu: "SatelliteUI",
+  },
+  "app.home": {
+    en: "Home",
+    hu: "Főoldal",
+  },
+  "app.dashboard": {
+    en: "Dashboard",
+    hu: "Áttekintés",
+  },
+  "app.telemetry": {
+    en: "Telemetry",
+    hu: "Telemetria",
+  },
+  "app.commands": {
+    en: "Commands",
+    hu: "Parancsok",
+  },
+  "app.darkMode": {
+    en: "Dark Mode",
+    hu: "Sötét Mód",
+  },
+  "app.lightMode": {
+    en: "Light Mode",
+    hu: "Világos Mód",
+  },
+  "home.satelliteInfo": {
+    en: "Satellite Information",
+    hu: "Műhold Információk",
+  },
+  "home.orbitParameters": {
+    en: "Orbit Parameters",
+    hu: "Pálya Paraméterek",
+  },
+  "home.upcomingPasses": {
+    en: "Upcoming Passes",
+    hu: "Közelgő áthaladások",
+  },
+  "home.altitude": {
+    en: "Altitude",
+    hu: "Magasság",
+  },
+  "home.velocity": {
+    en: "Velocity",
+    hu: "Sebesség",
+  },
+  "home.inclination": {
+    en: "Inclination",
+    hu: "Inklináció",
+  },
+  "home.eccentricity": {
+    en: "Eccentricity",
+    hu: "Excentricitás",
+  },
+  "home.period": {
+    en: "Period",
+    hu: "Periódus",
+  },
+  "home.nextPass": {
+    en: "Next Pass",
+    hu: "Következő Áthaladás",
+  },
+  "dashboard.solarVoltage": {
+    en: "Solar Voltage",
+    hu: "Napelem Feszültség",
+  },
+  "dashboard.batteryVoltage": {
+    en: "Battery Voltage",
+    hu: "Akkumulátor Feszültség",
+  },
+  "dashboard.temperature": {
+    en: "Temperature",
+    hu: "Hőmérséklet",
+  },
+  "dashboard.current": {
+    en: "Current",
+    hu: "Áramerősség",
+  },
+  "dashboard.history": {
+    en: "History",
+    hu: "Előzmények",
+  },
+  "dashboard.timeRange": {
+    en: "Time Range",
+    hu: "Időtartomány",
+  },
+  "telemetry.messages": {
+    en: "Messages",
+    hu: "Üzenetek",
+  },
+  "telemetry.details": {
+    en: "Details",
+    hu: "Részletek",
+  },
+  "telemetry.raw": {
+    en: "Raw",
+    hu: "Nyers",
+  },
+  "telemetry.binary": {
+    en: "Binary",
+    hu: "Bináris",
+  },
+  "telemetry.decimal": {
+    en: "Decimal",
+    hu: "Decimális",
+  },
+  "telemetry.hexadecimal": {
+    en: "Hexadecimal",
+    hu: "Hexadecimális",
+  },
+  "commands.available": {
+    en: "Available Commands",
+    hu: "Elérhető Parancsok",
+  },
+  "commands.details": {
+    en: "Command Details",
+    hu: "Parancs Részletek",
+  },
+  "commands.send": {
+    en: "Send Command",
+    hu: "Parancs Küldése",
+  },
+  "commands.reset": {
+    en: "Reset",
+    hu: "Visszaállítás",
+  },
+  "commands.reboot": {
+    en: "Reboot",
+    hu: "Újraindítás",
+  },
+  "commands.takePicture": {
+    en: "Take Picture",
+    hu: "Fénykép Készítése",
+  },
+  "commands.adjustPower": {
+    en: "Adjust Power",
+    hu: "Teljesítmény Beállítása",
+  },
+  "commands.adjustOrientation": {
+    en: "Adjust Orientation",
+    hu: "Orientáció Beállítása",
+  },
+}
+
+type LanguageContextType = {
+  language: Language
+  setLanguage: (lang: Language) => void
+  t: (key: string) => string
+}
+
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
+
+export function LanguageProvider({ children }: { children: ReactNode }) {
+  const [language, setLanguage] = useState<Language>("en")
+
+  // Load language preference from localStorage on client side
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("language") as Language
+    if (savedLanguage && (savedLanguage === "en" || savedLanguage === "hu")) {
+      setLanguage(savedLanguage)
+    }
+  }, [])
+
+  // Save language preference to localStorage
+  useEffect(() => {
+    localStorage.setItem("language", language)
+  }, [language])
+
+  // Translation function
+  const t = (key: string): string => {
+    if (translations[key] && translations[key][language]) {
+      return translations[key][language]
+    }
+    return key
+  }
+
+  return <LanguageContext.Provider value={{ language, setLanguage, t }}>{children}</LanguageContext.Provider>
+}
+
+export function useLanguage() {
+  const context = useContext(LanguageContext)
+  if (context === undefined) {
+    throw new Error("useLanguage must be used within a LanguageProvider")
+  }
+  return context
+}
