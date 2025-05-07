@@ -68,8 +68,8 @@ export default function Telemetry() {
 
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 				<div className="md:col-span-1 space-y-4">
-					<Card className="h-full p-2">
-						<div className="space-y-2 max-h-[calc(100vh-16rem)] overflow-y-auto custom-scrollbar">
+					<Card className="p-2">
+						<div className="space-y-2 max-h-[calc(100vh-14rem)] overflow-y-auto custom-scrollbar">
 							{messages.map((message) => (
 								<Card
 									key={message.id}
@@ -90,58 +90,64 @@ export default function Telemetry() {
 				</div>
 
 				<div className="md:col-span-2">
-					<Card className="h-full p-2">
-						<div className="flex justify-between items-center space-x-2 m-4">
-							<h1 className="text-xl">{selectedMessage.timestamp}</h1>
-							<div className="flex space-x-2">
-								<Button
-									variant={displayMode === "raw" ? "default" : "outline"}
-									size="sm"
-									onClick={() => setDisplayMode("raw")}
-								>
-									{t("telemetry.raw")}
-								</Button>
-								<Button
-									variant={displayMode === "processed" ? "default" : "outline"}
-									size="sm"
-									onClick={() => setDisplayMode("processed")}
-								>
-									{t("telemetry.processed")}
-								</Button>
-							</div>
-						</div>
-
-						<div className="m-10">
-							{displayMode === "raw" ? (
-								<h2 className="text-s w-full break-all">
-									{selectedMessage.telegram}
-								</h2>
-							) : (
-								<div className="m-10 overflow-auto rounded-lg shadow border border-gray-200">
-									<table className="min-w-full divide-y divide-gray-200">
-										<thead className="bg-gray-50">
-											<tr>
-												<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-													Parameter
-												</th>
-												<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-													Value
-												</th>
-											</tr>
-										</thead>
-										<tbody className="bg-white divide-y divide-gray-200">
-											{orderedKeys.map((key) => (
-												<tr key={key} className="hover:bg-gray-100">
-													<td className="px-6 py-4 whitespace-nowrap">{key}</td>
-													<td className="px-6 py-4 whitespace-nowrap">
-														{selectedMessage[key]}
-													</td>
-												</tr>
-											))}
-										</tbody>
-									</table>
+					<Card className="p-2 overflow-y-auto custom-scrollbar">
+						<div className="max-h-[calc(100vh-14rem)] overflow-y-auto custom-scrollbar">
+							<div className="flex justify-between items-center space-x-2 mx-4 mt-4">
+								<h1 className="text-xl">{selectedMessage.timestamp}</h1>
+								<div className="flex space-x-2">
+									<Button
+										variant={displayMode === "raw" ? "default" : "outline"}
+										size="sm"
+										onClick={() => setDisplayMode("raw")}
+									>
+										{t("telemetry.raw")}
+									</Button>
+									<Button
+										variant={
+											displayMode === "processed" ? "default" : "outline"
+										}
+										size="sm"
+										onClick={() => setDisplayMode("processed")}
+									>
+										{t("telemetry.processed")}
+									</Button>
 								</div>
-							)}
+							</div>
+
+							<div className="mx-10 my-6">
+								{displayMode === "raw" ? (
+									<h2 className="text-s w-full break-all">
+										{selectedMessage.telegram}
+									</h2>
+								) : (
+									<div className="mx-4 overflow-auto rounded-lg shadow border border-gray-200">
+										<table className="min-w-full divide-y divide-gray-200">
+											<thead className="bg-gray-50">
+												<tr>
+													<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+														Parameter
+													</th>
+													<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+														Value
+													</th>
+												</tr>
+											</thead>
+											<tbody className="bg-white divide-y divide-gray-200">
+												{orderedKeys.map((key) => (
+													<tr key={key} className="hover:bg-gray-100">
+														<td className="px-6 py-2 whitespace-nowrap">
+															{key}
+														</td>
+														<td className="px-6 py-2 whitespace-nowrap">
+															{selectedMessage[key]}
+														</td>
+													</tr>
+												))}
+											</tbody>
+										</table>
+									</div>
+								)}
+							</div>
 						</div>
 					</Card>
 				</div>
