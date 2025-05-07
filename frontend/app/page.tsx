@@ -15,9 +15,7 @@ export default function Home() {
 	return (
 		<div className="container py-6 scrollable-container custom-scrollbar overflow-auto h-[calc(100vh-70px)]">
 			<div className="flex flex-col md:flex-row w-full h-full w-full">
-				<div className="w-full md:w-2/3 h-full">
-					<EarthView orbitParams={params} />
-				</div>
+				<div className="w-full md:w-2/3 h-full"></div>
 				<div className="w-full md:w-1/3 p-4 scrollable-container custom-scrollbar">
 					<Card className="mb-4">
 						<CardHeader>
