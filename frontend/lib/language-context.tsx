@@ -81,6 +81,10 @@ const translations: Translations = {
 		en: "Next Pass",
 		hu: "Következő Áthaladás",
 	},
+	"dashboard.chartTitle": {
+		en: "Detailed chart",
+		hu: "Részletes diagram",
+	},
 	"dashboard.solarVoltage": {
 		en: "Solar Voltage",
 		hu: "Napelem Feszültség",

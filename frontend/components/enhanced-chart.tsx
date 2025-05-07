@@ -48,7 +48,7 @@ export default function EnhancedChart({
 		if (!chartInstance.current || !data.length) return;
 
 		const formattedData = data.map((item) => [
-			item.timestamp.getTime(),
+			item.timestamp,
 			item.value,
 		]);
 

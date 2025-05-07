@@ -2,16 +2,14 @@ package com.example.backend.entity;
 
 import com.example.backend.entity.Dto.TelegramDto;
 import com.example.backend.entity.Dto.TelegramPropertiesDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "telegrams")
 public class Telegram {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

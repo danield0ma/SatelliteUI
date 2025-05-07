@@ -20,7 +20,7 @@ export default function Telemetry() {
 	useEffect(() => {
 		async function fetchMessages() {
 			try {
-				const data = await fetchTelemetry("/telegramsWithProperties");
+				const data = await fetchTelemetry("/getTelegramsWithProperties");
 				setMessages(data);
 				setSelectedMessage(data[0]);
 			} catch (err: any) {

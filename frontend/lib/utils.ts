@@ -21,11 +21,11 @@ export function getStatusColor(
 	min: number,
 	max: number
 ): string {
-	if (value < min || value > max) {
+	if (value < min + (max - min) * 0.2 || value > max - (max - min) * 0.2) {
 		return "danger";
 	} else if (
-		value < min + (max - min) * 0.2 ||
-		value > max - (max - min) * 0.2
+		value < min + (max - min) * 0.4 ||
+		value > max - (max - min) * 0.4
 	) {
 		return "warning";
 	} else {

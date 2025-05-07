@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLanguage } from "@/lib/language-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Dialog,
@@ -29,9 +30,28 @@ export default function ParameterCard({
 	max,
 	historyData,
 }: ParameterCardProps) {
+	const { t } = useLanguage();
 	const [isOpen, setIsOpen] = useState(false);
 
 	const statusColor = getStatusColor(value, min, max);
+
+	const textColorClass =
+		statusColor === "success"
+			? "text-green-500"
+			: statusColor === "danger"
+			? "text-red-500"
+			: statusColor === "warning"
+			? "text-yellow-500"
+			: "text-primary";
+
+	const backgroundColorClass =
+		statusColor === "success"
+			? "bg-success"
+			: statusColor === "danger"
+			? "bg-danger"
+			: statusColor === "warning"
+			? "bg-warning"
+			: "bg-primary";
 
 	return (
 		<>
@@ -40,15 +60,17 @@ export default function ParameterCard({
 				onClick={() => setIsOpen(true)}
 			>
 				<CardHeader className="pb-2">
-					<CardTitle className="text-base font-medium">{title}</CardTitle>
+					<CardTitle className={`text-base font-medium ${textColorClass}`}>
+						{title}
+					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<div className={`text-2xl font-bold text-${statusColor}`}>
+					<div className={`text-2xl font-bold ${textColorClass}`}>
 						{value.toFixed(2)} {unit}
 					</div>
 					<div className="mt-2 h-1 w-full bg-muted overflow-hidden rounded-full">
 						<div
-							className={`h-full bg-${statusColor}`}
+							className={`h-full ${backgroundColorClass}`}
 							style={{
 								width: `${Math.max(
 									0,
@@ -61,8 +83,11 @@ export default function ParameterCard({
 			</Card>
 
 			<Dialog open={isOpen} onOpenChange={setIsOpen}>
-				<DialogContent className="max-w-5xl max-h-[90vh]">
-					<div className="h-[500px] w-full">
+				<DialogContent className="max-w-7xl max-h-[90vh]">
+					<DialogHeader>
+						<DialogTitle>{t("dashboard.chartTitle")}</DialogTitle>
+					</DialogHeader>
+					<div className="h-[600px] w-full">
 						<EnhancedChart
 							data={historyData}
 							title={title}

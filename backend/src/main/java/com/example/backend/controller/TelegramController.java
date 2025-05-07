@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.entity.Dto.TelegramDto;
 import com.example.backend.entity.Dto.TelegramPropertiesDto;
+import com.example.backend.service.TelemetryGenerator;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +16,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/telegrams")
 public class TelegramController {
+    @Autowired
+    private TelemetryGenerator telemetryGenerator;
+
     @Autowired
     private TelegramRepository telegramRepository;
 
@@ -41,12 +45,23 @@ public class TelegramController {
         }
     }
 
+    @Operation(summary = "Get latest telegram with properties", description = "Returns latest telegram")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Telegrams found"),
+            @ApiResponse(responseCode = "404", description = "Telegrams not found")
+    })
+    @GetMapping("/getLatestTelegram")
+    public ResponseEntity<TelegramPropertiesDto> getLatestTelegramsWithProperties() {
+        Optional<Telegram> telegram = telegramRepository.findTopByOrderByTimestampDesc();
+        return telegram.map(value -> ResponseEntity.ok(value.mapTelegramToTelegramPropertiesDto())).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @Operation(summary = "Get every telegram in raw format", description = "Returns every telegram")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Telegrams found"),
             @ApiResponse(responseCode = "404", description = "Telegrams not found")
     })
-    @GetMapping("/rawTelegrams")
+    @GetMapping("/getRawTelegrams")
     public List<TelegramDto> getAllTelegramsRaw() {
         return telegramRepository.findAll().stream()
                 .map(Telegram::mapTelegramToTelegramDto)
@@ -58,9 +73,9 @@ public class TelegramController {
             @ApiResponse(responseCode = "200", description = "Telegrams found"),
             @ApiResponse(responseCode = "404", description = "Telegrams not found")
     })
-    @GetMapping("/telegramsWithProperties")
+    @GetMapping("/getTelegramsWithProperties")
     public List<TelegramPropertiesDto> getAllTelegramsWithProperties() {
-        return telegramRepository.findAll().stream()
+        return telegramRepository.findAllByOrderByTimestampDesc().stream()
                 .map(Telegram::mapTelegramToTelegramPropertiesDto)
                 .toList();
     }
@@ -77,4 +92,9 @@ public class TelegramController {
         return telegramRepository.findById(id).orElse(null);
     }
 
+
+    @PostMapping("/generateTelegrams")
+    public void generateTelegrams(int n) {
+        telemetryGenerator.generateTelemetry(n);
+    }
 }
