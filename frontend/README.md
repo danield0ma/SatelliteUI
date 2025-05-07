@@ -1,4 +1,4 @@
-# SatelliteUI Frontend
+# SatelliteUI
 
 This project is a web-based user interface for monitoring telemetry data and managing commands for submodules of the Hunity-1 satellite that are developed by students from the University of Győr. It is built with modern web technologies and supports both light and dark modes. The application is available on English and Hungarian languages.
 
