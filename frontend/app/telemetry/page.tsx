@@ -4,18 +4,45 @@ import { useState, useEffect } from "react";
 import { useLanguage } from "@/lib/language-context";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { formatDate, convertToBinary, convertToHex } from "@/lib/utils";
 import { fetchTelemetry } from "@/lib/api";
 
 export default function Telemetry() {
 	const { t } = useLanguage();
 	const [messages, setMessages] = useState<any[]>([]);
 	const [selectedMessage, setSelectedMessage] = useState(messages[0]);
-	const [displayMode, setDisplayMode] = useState<
-		"raw" | "binary" | "decimal" | "hexadecimal"
-	>("decimal");
+	const [displayMode, setDisplayMode] = useState<"raw" | "processed">("raw");
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+
+	const orderedKeys = [
+		"v_Solar_Xp",
+		"v_Solar_Xm",
+		"v_Solar_Ym",
+		"mppt_VBus",
+		"mppt_CURR",
+		"bat_VBUS",
+		"bat_CURR",
+		"bat_TEMP",
+		"ina_VBUS",
+		"ina_CURR",
+		"eps_VBUS",
+		"eps_CURR",
+		"obc_VBUS",
+		"obc_CURR",
+		"com_VBUS",
+		"com_CURR",
+		"epsuptime",
+		"obcuptime",
+		"gyro_X_ROT",
+		"gyro_Y_ROT",
+		"gyro_Z_ROT",
+		"x_MAG",
+		"y_MAG",
+		"z_MAG",
+		"magn_OBC_TEMP",
+		"laser_CH1",
+		"laser_CH2",
+	];
 
 	useEffect(() => {
 		async function fetchMessages() {
@@ -31,41 +58,6 @@ export default function Telemetry() {
 		}
 		fetchMessages();
 	}, []);
-
-	const getParameterNames = (type: number) => {
-		switch (type) {
-			case 1:
-				return [
-					"Solar Voltage 1",
-					"Solar Voltage 2",
-					"Solar Voltage 3",
-					"Battery Voltage",
-				];
-			case 2:
-				return ["Temperature 1", "Temperature 2", "Temperature 3"];
-			case 3:
-				return ["Current 1", "Current 2", "Current 3", "Current 4"];
-			case 4:
-				return ["System Status", "Operation Mode", "Error Code"];
-			default:
-				return [];
-		}
-	};
-
-	const formatValue = (value: number) => {
-		switch (displayMode) {
-			case "raw":
-				return value.toString();
-			case "binary":
-				return convertToBinary(value);
-			case "decimal":
-				return value.toString();
-			case "hexadecimal":
-				return "0x" + convertToHex(value);
-			default:
-				return value.toString();
-		}
-	};
 
 	if (loading) return <p>Loading...</p>;
 	if (error) return <p>Error: {error}</p>;
@@ -110,47 +102,46 @@ export default function Telemetry() {
 									{t("telemetry.raw")}
 								</Button>
 								<Button
-									variant={displayMode === "binary" ? "default" : "outline"}
+									variant={displayMode === "processed" ? "default" : "outline"}
 									size="sm"
-									onClick={() => setDisplayMode("binary")}
+									onClick={() => setDisplayMode("processed")}
 								>
-									{t("telemetry.binary")}
-								</Button>
-								<Button
-									variant={displayMode === "decimal" ? "default" : "outline"}
-									size="sm"
-									onClick={() => setDisplayMode("decimal")}
-								>
-									{t("telemetry.decimal")}
-								</Button>
-								<Button
-									variant={
-										displayMode === "hexadecimal" ? "default" : "outline"
-									}
-									size="sm"
-									onClick={() => setDisplayMode("hexadecimal")}
-								>
-									{t("telemetry.hexadecimal")}
+									{t("telemetry.processed")}
 								</Button>
 							</div>
 						</div>
 
 						<div className="m-10">
-							<h2 className="text-s w-full break-all">
-								{selectedMessage.telegram}
-							</h2>
-							<div className="flex justify-between items-center space-x-2">
-								<h2 className="text-s w-full break-all">Solar xp</h2>
+							{displayMode === "raw" ? (
 								<h2 className="text-s w-full break-all">
-									{formatValue(selectedMessage.v_Solar_Xp)}
+									{selectedMessage.telegram}
 								</h2>
-							</div>
-							<h2 className="text-s w-full break-all">
-								{selectedMessage.v_Solar_Xm}
-							</h2>
-							<h2 className="text-s w-full break-all">
-								{selectedMessage.v_Solar_Ym}
-							</h2>
+							) : (
+								<div className="m-10 overflow-auto rounded-lg shadow border border-gray-200">
+									<table className="min-w-full divide-y divide-gray-200">
+										<thead className="bg-gray-50">
+											<tr>
+												<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+													Parameter
+												</th>
+												<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+													Value
+												</th>
+											</tr>
+										</thead>
+										<tbody className="bg-white divide-y divide-gray-200">
+											{orderedKeys.map((key) => (
+												<tr key={key} className="hover:bg-gray-100">
+													<td className="px-6 py-4 whitespace-nowrap">{key}</td>
+													<td className="px-6 py-4 whitespace-nowrap">
+														{selectedMessage[key]}
+													</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+								</div>
+							)}
 						</div>
 					</Card>
 				</div>

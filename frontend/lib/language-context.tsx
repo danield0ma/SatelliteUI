@@ -133,9 +133,9 @@ const translations: Translations = {
 		en: "Raw",
 		hu: "Nyers",
 	},
-	"telemetry.binary": {
-		en: "Binary",
-		hu: "Bináris",
+	"telemetry.processed": {
+		en: "Processed",
+		hu: "Feldarabolt",
 	},
 	"telemetry.decimal": {
 		en: "Decimal",
