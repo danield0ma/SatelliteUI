@@ -4,78 +4,18 @@ import { useState, useEffect } from "react";
 import { useLanguage } from "@/lib/language-context";
 import ParameterCard from "@/components/parameter-card";
 import { generateTelemetryData } from "@/lib/dummy-data";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function Dashboard() {
 	const { t } = useLanguage();
-	const [telemetryData, setTelemetryData] = useState(
+	const [telemetryData] = useState(
 		generateTelemetryData(100)
 	);
-
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setTelemetryData((prevData) => {
-				const newData = [...prevData];
-				newData.shift();
-				const lastData = newData[newData.length - 1];
-				const now = new Date();
-
-				newData.push({
-					timestamp: now,
-					solarVoltage1: Math.max(
-						4.5,
-						Math.min(5.2, lastData.solarVoltage1 + (Math.random() - 0.5) * 0.1)
-					),
-					solarVoltage2: Math.max(
-						4.6,
-						Math.min(5.3, lastData.solarVoltage2 + (Math.random() - 0.5) * 0.1)
-					),
-					solarVoltage3: Math.max(
-						4.4,
-						Math.min(5.1, lastData.solarVoltage3 + (Math.random() - 0.5) * 0.1)
-					),
-					batteryVoltage: Math.max(
-						3.6,
-						Math.min(
-							4.2,
-							lastData.batteryVoltage + (Math.random() - 0.5) * 0.05
-						)
-					),
-					temperature1: Math.max(
-						-10,
-						Math.min(40, lastData.temperature1 + (Math.random() - 0.5) * 2)
-					),
-					temperature2: Math.max(
-						-5,
-						Math.min(35, lastData.temperature2 + (Math.random() - 0.5) * 2)
-					),
-					temperature3: Math.max(
-						0,
-						Math.min(45, lastData.temperature3 + (Math.random() - 0.5) * 2)
-					),
-					current1: Math.max(
-						0.1,
-						Math.min(0.5, lastData.current1 + (Math.random() - 0.5) * 0.02)
-					),
-					current2: Math.max(
-						0.2,
-						Math.min(0.6, lastData.current2 + (Math.random() - 0.5) * 0.02)
-					),
-					current3: Math.max(
-						0.15,
-						Math.min(0.55, lastData.current3 + (Math.random() - 0.5) * 0.02)
-					),
-					current4: Math.max(
-						0.25,
-						Math.min(0.65, lastData.current4 + (Math.random() - 0.5) * 0.02)
-					),
-				});
-
-				return newData;
-			});
-		}, 5000);
-
-		return () => clearInterval(interval);
-	}, []);
 
 	const latestData = telemetryData[telemetryData.length - 1];
 

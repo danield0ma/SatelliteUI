@@ -87,7 +87,13 @@ export default function EnhancedChart({
 			return `rgba(0, 123, 255, ${opacity})`;
 		};
 
+		const bottomErrorThreshold = min + (max - min) * 0.1;
+		const bottomWarningThreshold = min + (max - min) * 0.2;
+		const topWarningThreshold = min + (max - min) * 0.8;
+		const topErrorThreshold = min + (max - min) * 0.9;
+
 		const option: echarts.EChartsOption = {
+			animation: false,
 			title: {
 				text: title,
 				left: "center",
@@ -141,13 +147,63 @@ export default function EnhancedChart({
 						color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
 							{
 								offset: 0,
-								color: adjustColorOpacity(color, 0.6),
+								color: adjustColorOpacity(color, 0.9),
 							},
 							{
 								offset: 1,
-								color: adjustColorOpacity(color, 0.1),
+								color: adjustColorOpacity(color, 0.6),
 							},
 						]),
+					},
+					emphasis: {
+						lineStyle: {
+							color: "blue",
+							width: 2,
+						},
+						itemStyle: {
+							color: "blue",
+						},
+					},
+					markArea: {
+						silent: true,
+						data: [
+							[
+								{
+									yAxis: min,
+									itemStyle: { color: "rgba(255, 0, 0, 0.3)" },
+								},
+								{
+									yAxis: bottomErrorThreshold,
+								},
+							],
+							[
+								{
+									yAxis: bottomErrorThreshold,
+									itemStyle: { color: "rgba(255, 255, 0, 0.3)" },
+								},
+								{
+									yAxis: bottomWarningThreshold,
+								},
+							],
+							[
+								{
+									yAxis: topWarningThreshold,
+									itemStyle: { color: "rgba(255, 255, 0, 0.3)" },
+								},
+								{
+									yAxis: topErrorThreshold,
+								},
+							],
+							[
+								{
+									yAxis: topErrorThreshold,
+									itemStyle: { color: "rgba(255, 0, 0, 0.3)" },
+								},
+								{
+									yAxis: max,
+								},
+							],
+						],
 					},
 				},
 			],

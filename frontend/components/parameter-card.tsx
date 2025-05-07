@@ -62,9 +62,6 @@ export default function ParameterCard({
 
 			<Dialog open={isOpen} onOpenChange={setIsOpen}>
 				<DialogContent className="max-w-5xl max-h-[90vh]">
-					<DialogHeader>
-						<DialogTitle>{title}</DialogTitle>
-					</DialogHeader>
 					<div className="h-[500px] w-full">
 						<EnhancedChart
 							data={historyData}
@@ -72,7 +69,7 @@ export default function ParameterCard({
 							min={min}
 							max={max}
 							unit={unit}
-							color={`hsl(var(--${statusColor}))`}
+							color={"primary"}
 						/>
 					</div>
 				</DialogContent>
