@@ -50,8 +50,8 @@ const translations: Translations = {
 		hu: "Műhold Információk",
 	},
 	"home.orbitParameters": {
-		en: "Orbit Parameters",
-		hu: "Pálya Paraméterek",
+		en: "Current orbital parameters",
+		hu: "Aktuális pálya paraméterek",
 	},
 	"home.upcomingPasses": {
 		en: "Upcoming Passes",
@@ -74,8 +74,8 @@ const translations: Translations = {
 		hu: "Excentricitás",
 	},
 	"home.period": {
-		en: "Period",
-		hu: "Periódus",
+		en: "Orbital period",
+		hu: "Orbitális periódus",
 	},
 	"home.nextPass": {
 		en: "Next Pass",
