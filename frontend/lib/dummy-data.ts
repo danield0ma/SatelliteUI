@@ -50,7 +50,7 @@ export const availableCommands = [
 		command: "PICT",
 	},
 	{
-		id: 4,
+		id: 3,
 		name: "Adjust Power Mode",
 		description: "Change the power consumption mode",
 		parameters: [
@@ -65,7 +65,7 @@ export const availableCommands = [
 		command: "POWR",
 	},
 	{
-		id: 5,
+		id: 4,
 		name: "Read from flash memory",
 		description: "Reads from the flash memory of the selected processor",
 		parameters: [
@@ -88,7 +88,7 @@ export const availableCommands = [
 		command: "RDFL",
 	},
 	{
-		id: 6,
+		id: 5,
 		name: "Write to flash memory",
 		description:
 			"Writes a binary file to the flash memory of the selected processor",
@@ -112,7 +112,7 @@ export const availableCommands = [
 		command: "WRFL",
 	},
 	{
-		id: 7,
+		id: 6,
 		name: "Perform update",
 		description: "Restart the selected module to perform software update",
 		parameters: [
@@ -125,7 +125,7 @@ export const availableCommands = [
 		command: "UPDT",
 	},
 	{
-		id: 8,
+		id: 7,
 		name: "Init laser measurement",
 		description:
 			"Start the laser measurement process with the given parameters",
