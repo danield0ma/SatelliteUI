@@ -60,7 +60,8 @@
 		"zod": "^3.24.1",
 		"three": "latest",
 		"echarts": "latest",
-		"react-country-flag": "latest"
+		"react-country-flag": "latest",
+		"react-datepicker": "latest"
 	},
 	"devDependencies": {
 		"@types/node": "^22",

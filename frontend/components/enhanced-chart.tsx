@@ -47,10 +47,7 @@ export default function EnhancedChart({
 	useEffect(() => {
 		if (!chartInstance.current || !data.length) return;
 
-		const formattedData = data.map((item) => [
-			item.timestamp,
-			item.value,
-		]);
+		const formattedData = data.map((item) => [item.timestamp, item.value]);
 
 		const adjustColorOpacity = (color: string, opacity: number): string => {
 			if (color.startsWith("hsl")) {
@@ -232,5 +229,5 @@ export default function EnhancedChart({
 		chartInstance.current.setOption(option);
 	}, [data, title, min, max, unit, color]);
 
-	return <div ref={chartRef} className="w-full h-full" />;
+	return <div ref={chartRef} className="w-full h-full min-h-[500px]" />;
 }

@@ -45,6 +45,14 @@ const translations: Translations = {
 		en: "Light Mode",
 		hu: "Világos Mód",
 	},
+	"app.yes": {
+		en: "Yes",
+		hu: "Igen",
+	},
+	"app.no": {
+		en: "No",
+		hu: "Nem",
+	},
 	"home.satelliteInfo": {
 		en: "Satellite Information",
 		hu: "Műhold Információk",
@@ -172,6 +180,14 @@ const translations: Translations = {
 	"commands.adjustOrientation": {
 		en: "Adjust Orientation",
 		hu: "Orientáció Beállítása",
+	},
+	"commands.confirm": {
+		en: "Confirm action",
+		hu: "Művelet megerősítése",
+	},
+	"commands.confirmQuestion": {
+		en: "Do you really want to send the following command?",
+		hu: "Biztos el szeretnéd küldeni a következő parancsot?",
 	},
 };
 

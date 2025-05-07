@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLanguage } from "@/lib/language-context";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,12 +23,24 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function Commands() {
 	const { t } = useLanguage();
 	const [selectedCommand, setSelectedCommand] = useState(availableCommands[0]);
 	const [paramValues, setParamValues] = useState<Record<string, any>>({});
 	const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+	const [inputValue, setInputValue] = useState("");
+	const [currentTime, setCurrentTime] = useState(new Date().toUTCString());
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setCurrentTime(new Date().toISOString());
+		}, 1000);
+
+		return () => clearInterval(interval);
+	}, []);
 
 	const handleParamChange = (name: string, value: any) => {
 		setParamValues((prev) => ({
@@ -49,6 +61,22 @@ export default function Commands() {
 			description: `${selectedCommand.name} command has been sent successfully.`,
 			icon: <Check className="text-green-500" />,
 		});
+	};
+
+	const generateFullCommand = () => {
+		let fullCommand = "$";
+		fullCommand += selectedCommand.command;
+		selectedCommand.parameters.forEach((param) => {
+			if (param.type === "autotime") {
+				fullCommand += `,${currentTime}`;
+			} else {
+				fullCommand += ",";
+				fullCommand += param.value;
+			}
+		});
+		fullCommand += "*AAAA\r\n";
+
+		return fullCommand;
 	};
 
 	return (
@@ -92,26 +120,61 @@ export default function Commands() {
 								{selectedCommand.parameters.map((param) => (
 									<div key={param.name} className="space-y-2">
 										<Label htmlFor={param.name}>
-											{param.name} {param.unit ? `(${param.unit})` : ""}
+											{param.name} {param.unit ? `[${param.unit}]` : ""}
 										</Label>
 
 										{param.type === "number" && (
 											<div className="space-y-2">
-												<div className="flex justify-between text-sm">
-													<span>{param.min}</span>
-													<span>
-														{paramValues[param.name] ?? param.default}
-													</span>
-													<span>{param.max}</span>
-												</div>
-												<Slider
-													id={param.name}
-													min={param.min}
-													max={param.max}
-													step={1}
-													defaultValue={[param.default]}
-													onValueChange={(value) =>
-														handleParamChange(param.name, value[0])
+												<input
+													type="text"
+													placeholder="Enter additional info"
+													className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+													defaultValue={param.value}
+												/>
+											</div>
+										)}
+
+										{param.type === "time" && (
+											<div className="space-y-2">
+												<DatePicker
+													selected={param.value ? new Date(param.value) : null}
+													onChange={(date) =>
+														handleParamChange(param.name, date)
+													}
+													showTimeSelect
+													showTimeInput
+													timeFormat="HH:mm:ss"
+													timeCaption="Time"
+													dateFormat="Pp"
+													placeholderText="Select date & time (including seconds)"
+													className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+													defaultValue={param.value}
+												/>
+											</div>
+										)}
+
+										{param.type === "autotime" && (
+											<div className="space-y-2">
+												<input
+													disabled
+													type="text"
+													placeholder="Enter additional info"
+													className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+													defaultValue={param.value}
+													value={currentTime}
+												/>
+											</div>
+										)}
+
+										{param.type === "hexa" && (
+											<div className="space-y-2">
+												<input
+													type="text"
+													placeholder="Enter additional info"
+													className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+													value={param.value ?? ""}
+													onChange={(e) =>
+														handleParamChange(param.value, e.target.value)
 													}
 												/>
 											</div>
@@ -143,7 +206,7 @@ export default function Commands() {
 									<h2 className="text-xl font-bold mb-4">
 										{t("commands.preview")}
 									</h2>
-									<p className="mb-2">{selectedCommand.command}</p>
+									<p className="mb-2">{generateFullCommand()}</p>
 								</div>
 
 								<div className="space-x-4 mt-8">
@@ -162,14 +225,12 @@ export default function Commands() {
 				<Dialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
 					<DialogContent>
 						<DialogHeader>
-							<DialogTitle>Confirm Command</DialogTitle>
+							<DialogTitle>{t("commands.confirm")}</DialogTitle>
 						</DialogHeader>
 						<div className="py-4">
-							<p className="mb-4">
-								Do you really want to send the following command?
-							</p>
+							<p className="mb-4">{t("commands.confirmQuestion")}</p>
 							<p className="mb-4 font-mono break-all">
-								{selectedCommand.command}
+								{generateFullCommand()}
 							</p>
 						</div>
 						<div className="flex justify-end space-x-4">
@@ -177,9 +238,9 @@ export default function Commands() {
 								variant="outline"
 								onClick={() => setConfirmDialogOpen(false)}
 							>
-								No
+								{t("app.no")}
 							</Button>
-							<Button onClick={confirmSendCommand}>Yes</Button>
+							<Button onClick={confirmSendCommand}>{t("app.yes")}</Button>
 						</div>
 					</DialogContent>
 				</Dialog>

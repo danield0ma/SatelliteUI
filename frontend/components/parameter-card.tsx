@@ -83,11 +83,11 @@ export default function ParameterCard({
 			</Card>
 
 			<Dialog open={isOpen} onOpenChange={setIsOpen}>
-				<DialogContent className="max-w-7xl max-h-[90vh]">
+				<DialogContent className="w-[90vw] h-[90vh] !max-w-none">
 					<DialogHeader>
 						<DialogTitle>{t("dashboard.chartTitle")}</DialogTitle>
 					</DialogHeader>
-					<div className="h-[600px] w-full">
+					<div className="h-full w-full">
 						<EnhancedChart
 							data={historyData}
 							title={title}
