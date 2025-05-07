@@ -44,7 +44,7 @@ This project is a web-based user interface for monitoring telemetry data and man
    cd satelliteui-frontend/frontend
    ```
 
-2. **Start the database:**
+2. **Start the database (Substitute {YOUR_PASSWORD} with your desired root password):**
 
    ```sh
    docker run --name mariadb -e MYSQL_ROOT_PASSWORD={YOUR_PASSWORD} -p 3306:3306 -d mariadb:latest
@@ -57,10 +57,10 @@ This project is a web-based user interface for monitoring telemetry data and man
    gradle bootRun
    ```
 
-4. **Generate random data that you can use**
+4. **Generate random data that you can use (Substitute {NUMBER_OF_TELEGRAMS} with the desired number, like 100):**
 
    ```sh
-   curl http://localhost:8080/telegrams/generateTelegrams?n=2
+   curl http://localhost:8080/telegrams/generateTelegrams?n={NUMBER_OF_TELEGRAMS}
    ```
 
 5. **Install front-end dependencies and start it:**
