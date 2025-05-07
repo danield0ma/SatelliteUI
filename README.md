@@ -1,4 +1,4 @@
-# SatelliteUI Frontend
+# SatelliteUI
 
 This project is a web-based user interface for monitoring telemetry data and managing commands for submodules of the Hunity-1 satellite that are developed by students from the University of Győr. It is built with modern web technologies and supports both light and dark modes. The application is available on English and Hungarian languages.
 
@@ -57,16 +57,28 @@ This project is a web-based user interface for monitoring telemetry data and man
    gradle bootRun
    ```
 
-4. **Install front-end dependencies and start it:**
+4. **Generate random data that you can use**
 
    ```sh
-   cd frontend
+   curl http://localhost:8080/telegrams/generateTelegrams?n=2
+   ```
+
+5. **Install front-end dependencies and start it:**
+
+   ```sh
+   cd ../frontend
    npm install
    npm run build
    npm run start
    ```
 
-   Then open [http://localhost:3000](http://localhost:3000) in your browser.
+6. **Create .env file for front-end with the local API's base path:**
+
+   ```sh
+   echo "NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/telegrams" > .env.local
+   ```
+
+Then open [http://localhost:3000](http://localhost:3000) in your browser and start using the application!
 
 ## Contributing
 
