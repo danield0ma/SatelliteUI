@@ -141,6 +141,14 @@ const translations: Translations = {
 		en: "Decimal",
 		hu: "Decimális",
 	},
+	"telemetry.parameter": {
+		en: "Parameter",
+		hu: "Paraméter",
+	},
+	"telemetry.value": {
+		en: "Value",
+		hu: "Érték",
+	},
 	"telemetry.hexadecimal": {
 		en: "Hexadecimal",
 		hu: "Hexadecimális",

@@ -131,7 +131,7 @@ export default function Commands() {
 												<input
 													type="text"
 													placeholder="Enter additional info"
-													className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+													className="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
 													value={
 														selectedCommand.parameters.find(
 															(p) => p.name === param.name
@@ -154,7 +154,7 @@ export default function Commands() {
 													timeCaption="Time"
 													dateFormat="yyyy-MM-dd HH:mm:ss"
 													placeholderText="Select date & time (including seconds)"
-													className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+													className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 dark:border-gray-600 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
 													defaultValue={param.value}
 													onChange={(v) => handleParamChange(param.name, v)}
 												/>
@@ -167,7 +167,7 @@ export default function Commands() {
 													disabled
 													type="text"
 													placeholder="Enter additional info"
-													className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+													className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 dark:border-gray-600 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
 													value={currentTime}
 												/>
 											</div>
@@ -176,13 +176,13 @@ export default function Commands() {
 										{param.type === "hexa" && (
 											<div className="space-y-2">
 												<div className="flex items-center">
-													<span className="px-3 py-2 border border-gray-300 rounded-l bg-gray-100 select-none">
+													<span className="px-3 py-2 border border-gray-300 rounded-l bg-gray-100 select-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:focus:ring-blue-400">
 														0x
 													</span>
 													<input
 														type="text"
 														placeholder="Enter hex value"
-														className="w-full border-t border-b border-r border-gray-300 rounded-r px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+														className="w-full border-t border-b border-r border-gray-300 dark:border-gray-600 rounded-r px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
 														value={
 															// Remove "0x" prefix if present so the user sees only the editable part.
 															(

@@ -5,6 +5,10 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
+export function randomInt(min: number, max: number): number {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 export function formatDate(date: Date): string {
 	return new Intl.DateTimeFormat("en-US", {
 		year: "numeric",
