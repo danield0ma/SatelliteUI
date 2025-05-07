@@ -103,30 +103,23 @@ export function generateTelemetryMessages(count = 20) {
 export const availableCommands = [
 	{
 		id: 1,
-		name: "Reset System",
-		description: "Perform a soft reset of the satellite system",
-		parameters: [],
+		name: "Set Time",
+		description:
+			"Sets the UTC time on the clock of the sattelite's on-board computer",
+		parameters: [
+			{
+				name: "time",
+				type: "time",
+				description: "Current UTC time",
+			},
+		],
+		command: "$TIME,2025-01-01T10:00:00*ASDF",
 	},
 	{
 		id: 2,
-		name: "Reboot",
-		description: "Perform a complete reboot of the satellite",
-		parameters: [
-			{
-				name: "delay",
-				type: "number",
-				min: 0,
-				max: 60,
-				default: 0,
-				unit: "seconds",
-				description: "Delay before reboot",
-			},
-		],
-	},
-	{
-		id: 3,
 		name: "Take Picture",
-		description: "Capture an image with the onboard camera",
+		description:
+			"Capture an image with the onboard camera and store it in the flash memory",
 		parameters: [
 			{
 				name: "resolution",
@@ -145,6 +138,7 @@ export const availableCommands = [
 				description: "Exposure time",
 			},
 		],
+		command: "$PICT*ASDF",
 	},
 	{
 		id: 4,
@@ -152,46 +146,117 @@ export const availableCommands = [
 		description: "Change the power consumption mode",
 		parameters: [
 			{
-				name: "mode",
+				name: "Power mode",
 				type: "select",
-				options: ["low", "normal", "high"],
+				options: ["solar-only", "low-power", "normal"],
 				default: "normal",
 				description: "Power mode",
 			},
 		],
+		command: "$POWR,1*ASDF",
 	},
 	{
 		id: 5,
-		name: "Adjust Orientation",
-		description: "Change the satellite's orientation",
+		name: "Read from flash memory",
+		description: "Reads from the flash memory of the selected processor",
 		parameters: [
 			{
-				name: "roll",
-				type: "number",
-				min: -180,
-				max: 180,
-				default: 0,
-				unit: "degrees",
-				description: "Roll angle",
+				name: "MCU number",
+				type: "select",
+				options: ["solar-only", "low-power", "normal"],
+				default: "normal",
+				description: "Power mode",
 			},
 			{
-				name: "pitch",
-				type: "number",
-				min: -90,
-				max: 90,
-				default: 0,
-				unit: "degrees",
-				description: "Pitch angle",
+				name: "Flash start address",
+				type: "select",
+				options: ["solar-only", "low-power", "normal"],
+				default: "normal",
+				description: "Power mode",
 			},
 			{
-				name: "yaw",
-				type: "number",
-				min: -180,
-				max: 180,
-				default: 0,
-				unit: "degrees",
-				description: "Yaw angle",
+				name: "Length",
+				type: "select",
+				options: ["solar-only", "low-power", "normal"],
+				default: "normal",
+				description: "Power mode",
 			},
 		],
+		command: "$RDFL,03,0x08005000,0x400*ASDF",
+	},
+	{
+		id: 6,
+		name: "Write to flash memory",
+		description:
+			"Writes a binary file to the flash memory of the selected processor",
+		parameters: [
+			{
+				name: "MCU number",
+				type: "select",
+				options: ["solar-only", "low-power", "normal"],
+				default: "normal",
+				description: "Power mode",
+			},
+			{
+				name: "Flash start address",
+				type: "select",
+				options: ["solar-only", "low-power", "normal"],
+				default: "normal",
+				description: "Power mode",
+			},
+			{
+				name: "Binary file",
+				type: "select",
+				options: ["solar-only", "low-power", "normal"],
+				default: "normal",
+				description: "Power mode",
+			},
+		],
+		command: "$WRFL,03,0x08005000,123456789*ASDF",
+	},
+	{
+		id: 7,
+		name: "Perform update",
+		description: "Restart the selected module to perform software update",
+		parameters: [
+			{
+				name: "MCU number",
+				type: "select",
+				options: ["solar-only", "low-power", "normal"],
+				default: "normal",
+				description: "Power mode",
+			},
+		],
+		command: "$RST,03*ASDF",
+	},
+	{
+		id: 8,
+		name: "Init laser measurement",
+		description:
+			"Start the laser measurement process with the given parameters",
+		parameters: [
+			{
+				name: "Number of measurements",
+				type: "select",
+				options: ["solar-only", "low-power", "normal"],
+				default: "normal",
+				description: "Power mode",
+			},
+			{
+				name: "Delay between measurements",
+				type: "select",
+				options: ["solar-only", "low-power", "normal"],
+				default: "normal",
+				description: "Power mode",
+			},
+			{
+				name: "Start time",
+				type: "select",
+				options: ["solar-only", "low-power", "normal"],
+				default: "normal",
+				description: "Power mode",
+			},
+		],
+		command: "$LASR,60,1,2025-06-01T10:00:00*ASDF",
 	},
 ];

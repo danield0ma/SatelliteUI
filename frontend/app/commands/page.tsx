@@ -16,11 +16,19 @@ import { Slider } from "@/components/ui/slider";
 import { availableCommands } from "@/lib/dummy-data";
 import { toast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
+import { Check } from "lucide-react";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function Commands() {
 	const { t } = useLanguage();
 	const [selectedCommand, setSelectedCommand] = useState(availableCommands[0]);
 	const [paramValues, setParamValues] = useState<Record<string, any>>({});
+	const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
 
 	const handleParamChange = (name: string, value: any) => {
 		setParamValues((prev) => ({
@@ -30,11 +38,16 @@ export default function Commands() {
 	};
 
 	const handleSendCommand = () => {
-		console.log("Sending command:", selectedCommand.name, paramValues);
+		setConfirmDialogOpen(true);
+	};
 
+	const confirmSendCommand = () => {
+		setConfirmDialogOpen(false);
 		toast({
+			variant: "success",
 			title: "Command Sent",
 			description: `${selectedCommand.name} command has been sent successfully.`,
+			icon: <Check className="text-green-500" />,
 		});
 	};
 
@@ -49,7 +62,7 @@ export default function Commands() {
 							{availableCommands.map((command) => (
 								<Card
 									key={command.id}
-									className={`cursor-pointer hover:bg-muted/50 transition-colors ${
+									className={`cursor-pointer hover:bg-muted/50 transition-colors mr-2 ${
 										selectedCommand.id === command.id ? "border-primary" : ""
 									}`}
 									onClick={() => {
@@ -129,13 +142,14 @@ export default function Commands() {
 										</div>
 									))}
 
+									<div className="text-sm text-muted-foreground">
+										<h2 className="text-xl font-bold mb-4">
+											{t("commands.preview")}
+										</h2>
+										<p className="mb-2">{selectedCommand.command}</p>
+									</div>
+
 									<div className="flex justify-end space-x-4 mt-8">
-										<Button
-											variant="outline"
-											onClick={() => setParamValues({})}
-										>
-											{t("commands.reset")}
-										</Button>
 										<Button onClick={handleSendCommand}>
 											{t("commands.send")}
 										</Button>
@@ -146,6 +160,33 @@ export default function Commands() {
 					</div>
 				</div>
 				<Toaster />
+
+				{confirmDialogOpen && (
+					<Dialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
+						<DialogContent>
+							<DialogHeader>
+								<DialogTitle>Confirm Command</DialogTitle>
+							</DialogHeader>
+							<div className="py-4">
+								<p className="mb-4">
+									Do you really want to send the following command?
+								</p>
+								<p className="mb-4 font-mono break-all">
+									{selectedCommand.command}
+								</p>
+							</div>
+							<div className="flex justify-end space-x-4">
+								<Button
+									variant="outline"
+									onClick={() => setConfirmDialogOpen(false)}
+								>
+									No
+								</Button>
+								<Button onClick={confirmSendCommand}>Yes</Button>
+							</div>
+						</DialogContent>
+					</Dialog>
+				)}
 			</div>
 		</div>
 	);

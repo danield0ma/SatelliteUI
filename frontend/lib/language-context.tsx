@@ -137,6 +137,10 @@ const translations: Translations = {
 		en: "Available Commands",
 		hu: "Elérhető Parancsok",
 	},
+	"commands.preview": {
+		en: "Message Preview",
+		hu: "Előnézet",
+	},
 	"commands.details": {
 		en: "Command Details",
 		hu: "Parancs Részletek",
